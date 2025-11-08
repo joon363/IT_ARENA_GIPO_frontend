@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'themes.dart';
 import 'screens/home_screen.dart';
 import 'screens/alarm_camera_screen.dart';
+import 'screens/alarm_screen.dart';
 import 'package:camera/camera.dart';
 
 void main() async {
@@ -25,10 +26,11 @@ class MyApp extends StatelessWidget {
       title: 'ITARENA',
       theme: AppTheme.lightTheme(context),
       // 첫 화면: 로그인
-      initialRoute: '/',
+      initialRoute: '/alarm',
       routes: {
         '/': (context) => const HomeScreen(),
-        '/alarm': (context) => AlarmCameraScreen(camera: camera),
+        '/alarm': (context) => const AlarmScreen(),
+        '/alarmCamera': (context) => AlarmCameraScreen(camera: camera),
       },
     );
   }
