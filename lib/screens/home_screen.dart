@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.all(14.0),
                     child: Text(
                       '호날두 수면법',
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)
                     ),
                   ),
                 ],
@@ -113,6 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                  child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const SizedBox(height : 100),
                     // 빨간색 원 (진행률 표시기)
                     CustomPaint(
                       painter: _CircleProgressPainter(progress: _progress),
@@ -127,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 80), // 원과 버튼 사이 간격
+                    const SizedBox(height: 150), // 원과 버튼 사이 간격
                     
                     // 수면법 변경하기 버튼
                     ElevatedButton(
@@ -181,7 +182,7 @@ class _CircleProgressPainter extends CustomPainter {
 
     // 진행률 원 (빨간색)
     final progressPaint = Paint()
-      ..color = Color(0xffFFBA6A)
+      ..color = Color(0xffFF9F31)
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round;
