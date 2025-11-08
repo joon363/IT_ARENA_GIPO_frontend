@@ -1,14 +1,16 @@
 
 class UserStatus {
   final String name;
-  bool status; // 갱신 가능해야 하므로 var 대신 String
+  bool status;
+  String? imageUrl;
 
-  UserStatus({required this.name, required this.status});
+  UserStatus({required this.name, required this.status, this.imageUrl});
 
   factory UserStatus.fromJson(Map<String, dynamic> json) {
     return UserStatus(
       name: json['name'],
       status: json['status'],
+      imageUrl: json['imageUrl'],
     );
   }
 }

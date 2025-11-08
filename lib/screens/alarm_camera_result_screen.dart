@@ -7,6 +7,7 @@ import 'alarm_waiting_screen.dart';
 import '../themes.dart';
 export 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
 import '../models/userStatus.dart';
 
 // A widget that displays the picture taken by the user.
@@ -124,15 +125,13 @@ class _AlarmCameraResultScreenState extends State<AlarmCameraResultScreen> {
                     final result = snapshot.data!;
                     if (result) {
                       Future.delayed(const Duration(seconds: 3), () {
-                        if (context.mounted) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => AlarmWaitingScreen(
-                                imagePath: widget.imagePath,
-                              ),
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => AlarmWaitingScreen(
+                              imagePath: widget.imagePath,
                             ),
-                          );
-                        }
+                          ),
+                        );
                       });
                     }
                     return result ?
