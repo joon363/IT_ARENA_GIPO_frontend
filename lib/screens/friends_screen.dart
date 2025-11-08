@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import '../models/friend_model.dart';
 import '../connections/api_calls.dart';
+import '../connections/API_KEYS.dart';
 import 'package:it_arena/themes.dart';
 import 'package:flutter/services.dart';
+import '../constants.dart';
+
 
 class FriendsScreen extends StatefulWidget {
   const FriendsScreen({super.key});
@@ -12,7 +15,7 @@ class FriendsScreen extends StatefulWidget {
 }
 
 class _FriendsScreenState extends State<FriendsScreen> {
-  late Future<List<Friend>> _friendsFuture;
+  late Future<List<User>> _friendsFuture;
   final _controller = TextEditingController();
   bool isButtonEnabled = false;
   bool isWaitingForResponse = false;
@@ -20,7 +23,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
   @override
   void initState() {
     super.initState();
-    _friendsFuture = fetchFriendsDummy();
+    _friendsFuture = fetchFriends(junToken);
   }
 
   @override
@@ -136,7 +139,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
         elevation: 2,
         child: Icon(Icons.person_add_alt_1, color: Colors.white, size: 30,),
       ),
-      body: FutureBuilder<List<Friend>>(
+      body: FutureBuilder<List<User>>(
         future: _friendsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -147,12 +150,12 @@ class _FriendsScreenState extends State<FriendsScreen> {
             return const Center(child: Text("친구가 없습니다."));
           }
 
-          final friends = snapshot.data!;
+          final List<User> friends = snapshot.data!;
 
           return ListView.builder(
             itemCount: friends.length,
             itemBuilder: (context, index) {
-              final friend = friends[index];
+              final User friend = friends[index];
               return Container(
                 margin: EdgeInsets.only(right: 12, left: 12, top: 12),
                 padding: EdgeInsets.symmetric(horizontal: 24),
@@ -168,13 +171,13 @@ class _FriendsScreenState extends State<FriendsScreen> {
                       child: Row(
                         spacing: 12,
                         children: [
-                          Text(friend.friendUsername, style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),),
+                          Text(friend.nickname!, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(friend.location, style: TextStyle(color: gray, fontSize: 12, fontWeight: FontWeight.bold),),
-                              Text(friend.phone, style: TextStyle(color: gray, fontSize: 12, fontWeight: FontWeight.bold),),
+                              Text(friend.room, style: TextStyle(color: gray, fontSize: 12, fontWeight: FontWeight.bold),),
+                              Text(friend.tel, style: TextStyle(color: gray, fontSize: 12, fontWeight: FontWeight.bold),),
 
                             ],
                           )
@@ -190,7 +193,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                         color: primaryColor
                       ),
                       child: Text(
-                        friend.preferRoutine,
+                        SleepTypesString(friend.sleeptype),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,

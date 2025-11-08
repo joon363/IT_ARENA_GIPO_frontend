@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import '../models/party_model.dart';
 import '../models/userStatus.dart';
 import '../models/friend_model.dart';
-const String baseUrl = 'https://your.api.endpoint';
+const String baseUrl = 'https://api.isttech.franknoh.dev/v1';
 
 Future<bool> checkPoseSuccessFromApi({
   required String imagePath, // Flutter asset 경로
@@ -47,7 +47,7 @@ Future<bool> checkPoseSuccessFromApi({
 Future<List<UserStatus>> fetchUserStatuses() async {
 
   List<UserStatus> users = [
-    UserStatus(name: 'user1', status: true, imageUrl: "https://example.com/images/user1.jpg"),
+    UserStatus(name: 'user1', status: false, imageUrl: "https://example.com/images/user1.jpg"),
     UserStatus(name: 'user2', status: true, imageUrl: "https://example.com/images/user1.jpg"),
     UserStatus(name: 'user3', status: true, imageUrl: "https://example.com/images/user1.jpg"),
     UserStatus(name: 'user4', status: true, imageUrl: "https://example.com/images/user1.jpg"),
@@ -66,118 +66,25 @@ Future<List<UserStatus>> fetchUserStatuses() async {
   }
   return users;
 }
-Future<List<Friend>> fetchFriendsDummy() async {
-  await Future.delayed(const Duration(seconds: 1)); // 네트워크 지연 흉내
+Future<List<User>> fetchFriends(String token) async {
+  const url = '$baseUrl/users/friends';
 
-  final dummyResponse = [
-    {
-      "id": "1",
-      "user_id": "u001",
-      "friend_id": "f001",
-      "is_active": true,
-      "location": "기숙사 7동 312호",
-      "phone": "010-1234-5678",
-      "preferRoutine": "호날두 수면법",
-      "friend_username": "김하늘"
+  final response = await http.get(
+    Uri.parse(url),
+    headers: {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
     },
-    {
-      "id": "2",
-      "user_id": "u001",
-      "friend_id": "f002",
-      "is_active": false,
-      "location": "기숙사 9동 214호",
-      "phone": "010-9876-5432",
-      "preferRoutine": "드웨인 수면법",
-      "friend_username": "이준호"
-    },
-    {
-      "id": "3",
-      "user_id": "u001",
-      "friend_id": "f003",
-      "is_active": true,
-      "location": "기숙사 5동 120호",
-      "phone": "010-5555-8888",
-      "preferRoutine": "기본 수면법",
-      "friend_username": "박지현"
-    },
-    {
-      "id": "4",
-      "user_id": "u001",
-      "friend_id": "f004",
-      "is_active": false,
-      "location": "기숙사 3동 410호",
-      "phone": "010-2222-9999",
-      "preferRoutine": "다빈치 수면법",
-      "friend_username": "정유진"
-    },
-    {
-      "id": "4",
-      "user_id": "u001",
-      "friend_id": "f004",
-      "is_active": false,
-      "location": "기숙사 3동 410호",
-      "phone": "010-2222-9999",
-      "preferRoutine": "다빈치 수면법",
-      "friend_username": "정유진"
-    },
-    {
-      "id": "4",
-      "user_id": "u001",
-      "friend_id": "f004",
-      "is_active": false,
-      "location": "기숙사 3동 410호",
-      "phone": "010-2222-9999",
-      "preferRoutine": "다빈치 수면법",
-      "friend_username": "정유진"
-    },
-    {
-      "id": "4",
-      "user_id": "u001",
-      "friend_id": "f004",
-      "is_active": false,
-      "location": "기숙사 3동 410호",
-      "phone": "010-2222-9999",
-      "preferRoutine": "다빈치 수면법",
-      "friend_username": "정유진"
-    },
-    {
-      "id": "4",
-      "user_id": "u001",
-      "friend_id": "f004",
-      "is_active": false,
-      "location": "기숙사 3동 410호",
-      "phone": "010-2222-9999",
-      "preferRoutine": "다빈치 수면법",
-      "friend_username": "정유진"
-    },
-    {
-      "id": "4",
-      "user_id": "u001",
-      "friend_id": "f004",
-      "is_active": false,
-      "location": "기숙사 3동 410호",
-      "phone": "010-2222-9999",
-      "preferRoutine": "다빈치 수면법",
-      "friend_username": "정유진"
-    },
-  ];
-
-  return dummyResponse.map((e) => Friend.fromJson(e)).toList();
-}
-
-
-Future<List<Friend>> fetchFriends() async {
-  const url = 'https://example.com/api/friends'; // 🔸 실제 API 주소로 변경
-
-  final response = await http.get(Uri.parse(url));
+  );
 
   if (response.statusCode == 200) {
     final List<dynamic> jsonData = json.decode(response.body);
-    return jsonData.map((data) => Friend.fromJson(data)).toList();
+    return jsonData.map((data) => Friend.fromJson(data).user).toList();
   } else {
-    throw Exception('Failed to load friends');
+    throw Exception('Failed to load friends: ${response.statusCode}');
   }
 }
+
 
 Future<List<AlarmParty>> fetchAlarmParties() async {
   await Future.delayed(const Duration(seconds: 1)); // 네트워크 지연 시뮬레이션
