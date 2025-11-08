@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'themes.dart';
 import 'screens/home_screen.dart';
-import 'screens/alarm_camera_screen.dart';
 import 'screens/alarm_screen.dart';
-import 'package:camera/camera.dart';
 
 void main()  {
-
   runApp(const MyApp());
 }
 

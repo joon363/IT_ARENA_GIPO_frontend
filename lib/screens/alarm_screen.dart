@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 export 'package:provider/provider.dart';
+import 'package:camera/camera.dart';
+import 'alarm_camera_screen.dart';
 
 // A screen that allows users to take a picture using a given camera.
 class AlarmScreen extends StatefulWidget {
@@ -43,7 +45,7 @@ class AlarmScreenState extends State<AlarmScreen> {
                     const SnackBar(content: Text("카메라 초기화에 실패했습니다.")),
                   );
                 }
-              }
+              },
               child: Container(
                 height: 100,
                 width: 100,
