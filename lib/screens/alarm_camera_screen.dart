@@ -1,8 +1,8 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'alarm_camera_done_waiting_screen.dart';
-import '../themes.dart';
+import 'alarm_camera_result_screen.dart';
 export 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -22,6 +22,15 @@ class AlarmCameraScreen extends StatefulWidget {
 class AlarmCameraScreenState extends State<AlarmCameraScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
+  late String _refImagePath;
+  final List<String> _refImagePaths = [
+    "assets/images/ref_good.jpg"
+  ];
+  String _selectRandomImagePath(){
+    var random = Random();
+    int index = random.nextInt(_refImagePaths.length);
+    return _refImagePaths[index];
+  }
 
   @override
   void initState() {
@@ -37,6 +46,8 @@ class AlarmCameraScreenState extends State<AlarmCameraScreen> {
 
     // Next, initialize the controller. This returns a Future.
     _initializeControllerFuture = _controller.initialize();
+    _refImagePath = _selectRandomImagePath();
+
   }
 
   @override
@@ -49,92 +60,147 @@ class AlarmCameraScreenState extends State<AlarmCameraScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(child: FutureBuilder<void>(
+      body: SafeArea(child: FutureBuilder<void>(
           future: _initializeControllerFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               // If the Future is complete, display the preview.
               return Stack(
-                alignment: Alignment.center,
                 children: [
                   Expanded(child: Container(
-                    color: Colors.black,
-                  )),
-                  CameraPreview(_controller),
+                      color: Colors.black,
+                    )),
+                  Center(child: CameraPreview(_controller),),
                   Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      spacing: 16,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          spacing: 16 * 4,
-                          children: [
-                            Material(
-                              elevation: 0,
-                              color: Colors.white, // 배경색
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    spacing: 16,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        spacing: 16 * 4,
+                        children: [
+                          Material(
+                            elevation: 0,
+                            color: Colors.white, // 배경색
+                            borderRadius: BorderRadius.circular(999),
+                            child: InkWell(
+                              //highlightColor: primaryColor,
                               borderRadius: BorderRadius.circular(999),
-                              child: InkWell(
-                                //highlightColor: primaryColor,
-                                borderRadius: BorderRadius.circular(999),
-                                onTap: () async {
-                                  Navigator.pop(context);
-                                },
-                                child: CircleAvatar(
-                                    radius: 30, // 원의 반지름
-                                    backgroundColor: Colors.white, // 하얀 배경
-                                    child: Icon(CupertinoIcons.xmark, size: 25, color: Colors.black,)
-                                ),
+                              onTap: () async {
+                                Navigator.pop(context);
+                              },
+                              child: CircleAvatar(
+                                radius: 30, // 원의 반지름
+                                backgroundColor: Colors.white, // 하얀 배경
+                                child: Icon(CupertinoIcons.xmark, size: 25, color: Colors.black,)
                               ),
                             ),
-                            Material(
-                              elevation: 0,
-                              color: Colors.white, // 배경색
+                          ),
+                          Material(
+                            elevation: 0,
+                            color: Colors.white, // 배경색
+                            borderRadius: BorderRadius.circular(999),
+                            child: InkWell(
+                              //highlightColor: primaryColor,
                               borderRadius: BorderRadius.circular(999),
-                              child: InkWell(
-                                //highlightColor: primaryColor,
-                                borderRadius: BorderRadius.circular(999),
-                                onTap: () async {
-                                  // Take the Picture in a try / catch block. If anything goes wrong,
-                                  // catch the error.
-                                  try {
-                                    // Ensure that the camera is initialized.
-                                    await _initializeControllerFuture;
+                              onTap: () async {
+                                try {
+                                  await _initializeControllerFuture;
 
-                                    // Attempt to take a picture and get the file `image`
-                                    // where it was saved.
-                                    final image = await _controller.takePicture();
+                                  // --- 카운트다운 다이얼로그 표시 ---
+                                  int count = 5;
+                                  await showDialog(
+                                    context: context,
+                                    //barrierDismissible: false, // 중간에 닫히지 않게
+                                    barrierColor: Colors.black26,
+                                    builder: (context) {
+                                      return StatefulBuilder(
+                                        builder: (context, setState) {
+                                          // 1초마다 count 감소
+                                          Future.delayed(const Duration(seconds: 1), () {
+                                            if (count > 1) {
+                                              setState(() => count--);
+                                            } else {
+                                              Navigator.pop(context); // 카운트 끝나면 닫기
+                                            }
+                                          });
 
-                                    if (!context.mounted) return;
+                                          return Center(
+                                            child: Container(
+                                              child: Text(
+                                                '$count',
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 100,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  );
 
-                                    // If the picture was taken, display it on a new screen.
-                                    await Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => AlarmCameraDoneWaitingScreen(
-                                          // Pass the automatically generated path to
-                                          // the DisplayPictureScreen widget.
-                                          imagePath: image.path,
-                                          refImagePath: image.path,
-                                        ),
+                                  // --- 카운트 끝나면 촬영 ---
+                                  final image = await _controller.takePicture();
+
+                                  if (!context.mounted) return;
+
+                                  await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => AlarmCameraResultScreen(
+                                        imagePath: image.path,
+                                        refImagePath: _refImagePath,
                                       ),
-                                    );
-                                  } catch (e) {
-                                    // If an error occurs, log the error to the console.
-                                    print(e);
-                                  }
-                                },
-                                child: CircleAvatar(
-                                    radius: 30, // 원의 반지름
-                                    backgroundColor: Colors.white, // 하얀 배경
-                                    child: Icon(Icons.camera_alt, size: 25, color: Colors.black,)
-                                ),
+                                    ),
+                                  );
+                                } catch (e) {
+                                  print(e);
+                                }
+                              },
+
+                              child: CircleAvatar(
+                                radius: 30, // 원의 반지름
+                                backgroundColor: Colors.white, // 하얀 배경
+                                child: Icon(Icons.camera_alt, size: 25, color: Colors.black,)
                               ),
                             ),
-                          ],
-                        ),
-                        SizedBox(height: 16 * 2,)
-                      ]
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16 * 2,)
+                    ]
                   ),
+
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Column(
+                      spacing: 8,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 16 * 3),
+                          height: 200,
+                          width: 200,
+                          child: Image.asset(_refImagePath, scale: 0.5, fit: BoxFit.scaleDown,),
+                        ),
+                        Container(
+                          color: Colors.black,
+                          padding: EdgeInsets.all(8),
+                          child: Text(
+                            '위 사진과 동일한 포즈를 취해주세요. \n버튼 클릭 후 5초 뒤 촬영됩니다.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  )
                 ],
               );
             } else {

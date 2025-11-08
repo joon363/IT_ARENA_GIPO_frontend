@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
+import '../models/userStatus.dart';
 
 Future<bool> checkPoseSuccessFromApi({
   required String imagePath, // Flutter asset 경로
@@ -38,4 +39,25 @@ Future<bool> checkPoseSuccessFromApi({
   final data = jsonDecode(response.body);
   final bool judgement = data['result'];
   return judgement;
+}
+
+Future<List<UserStatus>> fetchUserStatuses() async {
+
+  List<UserStatus> users = [
+    UserStatus(name: 'user1', status: false),
+    UserStatus(name: 'user2', status: true),
+    UserStatus(name: 'user3', status: false),
+    UserStatus(name: 'user4', status: true),
+  ];
+  return users;
+  try {
+    final response = await http.get(Uri.parse('https://example.com/api/users'));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body) as List;
+      users = data.map((e) => UserStatus.fromJson(e)).toList();
+    }
+  } catch (e) {
+    print('API Error: $e');
+  }
+  return users;
 }
