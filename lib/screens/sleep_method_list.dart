@@ -37,7 +37,7 @@ class _SleepMethodListScreenState extends State<SleepMethodListScreen> {
                           height: 20,
                         ),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/');
+                          Navigator.pop(context);
                         },
                       ),
                     ),
