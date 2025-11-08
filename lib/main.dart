@@ -5,19 +5,13 @@ import 'screens/alarm_camera_screen.dart';
 import 'screens/alarm_screen.dart';
 import 'package:camera/camera.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+void main()  {
 
-  // 카메라 리스트 가져오기
-  final cameras = await availableCameras();
-  final firstCamera = cameras.first;
-  runApp(MyApp(camera: firstCamera));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final CameraDescription camera;
-
-  const MyApp({super.key, required this.camera});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
