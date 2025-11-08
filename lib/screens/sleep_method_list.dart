@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/sleep_provider.dart';
 
 class SleepMethodListScreen extends StatefulWidget {
   const SleepMethodListScreen({super.key});
@@ -8,31 +10,9 @@ class SleepMethodListScreen extends StatefulWidget {
 }
 
 class _SleepMethodListScreenState extends State<SleepMethodListScreen> {
-  // 현재 선택된 카드의 인덱스를 저장. -1은 아무것도 선택되지 않음을 의미.
-  int _selectedMethodIndex = -1;
-
-  // 카드에 표시될 수면법 목록
-  final List<Map<String, String>> sleepMethods = [
-    {
-      'title': '기본 수면법',
-      'description': '가장 일반적인 단일 수면입니다.',
-    },
-    {
-      'title': '수면법 01: 호날두 수면법',
-      'description': '짧은 수면을 여러 번 나누어 잡니다.',
-    },
-    {
-      'title': '수면법 02: 드웨인 존슨 수면법',
-      'description': '이른 시간에 취침하고 일찍 일어납니다.',
-    },
-    {
-      'title': '수면법 03: 다빈치 수면법',
-      'description': '극단적인 다상 수면의 한 형태입니다.',
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final sleepProvider = Provider.of<SleepProvider>(context);
     return Scaffold(
       // 1. 하단 Navbar (home_screen.dart와 동일)
       bottomNavigationBar: BottomAppBar(
@@ -148,9 +128,9 @@ class _SleepMethodListScreenState extends State<SleepMethodListScreen> {
                 // ListView.builder를 사용해 카드 목록을 동적으로 생성
                 child: ListView.builder(
                   padding: const EdgeInsets.all(20.0), // 목록 전체에 여백
-                  itemCount: sleepMethods.length, // 카드 개수 (4개)
+                  itemCount: sleepProvider.sleepMethods.length, // 카드 개수 (4개)
                   itemBuilder: (context, index) {
-                    final method = sleepMethods[index];
+                    final method = sleepProvider.sleepMethods[index];
                     return _buildMethodCard(
                       title: method['title']!,
                       description: method['description']!,
@@ -173,7 +153,9 @@ class _SleepMethodListScreenState extends State<SleepMethodListScreen> {
     required int index,
   }) {
     // 현재 카드가 선택되었는지 확인
-    final bool isSelected = (_selectedMethodIndex == index);
+    final int currentIndex = 
+    Provider.of<SleepProvider>(context).selectedMethodIndex;
+    final bool isSelected = (index == currentIndex);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0), // 카드 사이의 간격
@@ -185,11 +167,9 @@ class _SleepMethodListScreenState extends State<SleepMethodListScreen> {
         child: InkWell(
           borderRadius: BorderRadius.circular(12.0),
           onTap: () {
-            // 카드를 탭하면 setState를 호출하여 선택 상태를 업데이트
-            setState(() {
-              _selectedMethodIndex = index;
-            });
-            print('$title 선택됨');
+            // 카드 탭 시 선택된 수면법 인덱스 업데이트
+            Provider.of<SleepProvider>(context, listen: false)
+                .setSelectedMethod(index);
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),

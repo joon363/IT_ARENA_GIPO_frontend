@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'package:provider/provider.dart';
+import '../providers/sleep_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final double _progress = 0.75; // 0.0 ~ 1.0 사이의 값
   @override
   Widget build(BuildContext context) {
+    final sleepProvider = Provider.of<SleepProvider>(context);
     return Scaffold(
       // 1. 하단 Navbar
       bottomNavigationBar: BottomAppBar(
@@ -89,13 +92,13 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               width: double.infinity, // 가로 폭 전체
               color: Colors.white,      // 배경색을 하얀색으로 지정
-              child: const Column(
+              child: Column(
                 // 공백과 텍스트를 담기 위해 Column 사용
                 children: [
                   Padding(
                     padding: EdgeInsets.all(14.0),
                     child: Text(
-                      '호날두 수면법',
+                      sleepProvider.selectedMethodTitle,
                       style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)
                     ),
                   ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'providers/sleep_provider.dart';
 import 'themes.dart';
 import 'screens/home_screen.dart';
 import 'screens/alarm_screen.dart';
@@ -9,7 +11,12 @@ import 'screens/sleep_method_Dwayne.dart';
 import 'screens/sleep_method_Davinci.dart';
 
 void main()  {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => SleepProvider(),
+      child: const MyApp(),
+      ),
+  );
 }
 
 class MyApp extends StatelessWidget {
