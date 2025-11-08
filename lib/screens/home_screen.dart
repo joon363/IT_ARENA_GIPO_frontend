@@ -50,7 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                     height: double.infinity,
                     alignment: Alignment.center,
-                    // 요청하신 sleep_mode.png 이미지
                     child: Image.asset(
                       'assets/images/bell.png',
                       width: 35,
@@ -66,13 +65,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () {
                     // 3번 버튼 기능
                     // Navigator.pushNamed(context, '/friend'); // TODO: '/friend' 라우트 미정
-                    print('친구 목록 버튼 구역 클릭됨!');
+
                   },
                   child: Container(
                     height: double.infinity,
                     alignment: Alignment.center,
-                    // 아이콘이 없으므로 비어있음
-                    // child: Icon(Icons.people_outline), // (테스트용)
+                    child: Image.asset(
+                      'assets/images/users.png',
+                      width: 35,
+                      height: 35,
+                    ),
                   ),
                 ),
               ),
