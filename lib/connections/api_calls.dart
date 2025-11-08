@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
+import '../models/party_model.dart';
 import '../models/userStatus.dart';
 import '../models/friend_model.dart';
 
@@ -129,4 +130,28 @@ Future<List<Friend>> fetchFriends() async {
   } else {
     throw Exception('Failed to load friends');
   }
+}
+
+Future<List<AlarmParty>> fetchAlarmParties() async {
+  await Future.delayed(const Duration(seconds: 1)); // 네트워크 지연 시뮬레이션
+
+  final responseData = [
+    {
+      "time": "07:00",
+      "members": ["user1", "user2", "user3"],
+      "isParticipating": true,
+    },
+    {
+      "time": "08:30",
+      "members": ["user4", "user5"],
+      "isParticipating": false,
+    },
+    {
+      "time": "09:15",
+      "members": ["user2", "user6", "user7", "user8"],
+      "isParticipating": true,
+    },
+  ];
+
+  return responseData.map((json) => AlarmParty.fromJson(json)).toList();
 }
