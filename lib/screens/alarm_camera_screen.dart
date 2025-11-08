@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'alarm_camera_result_screen.dart';
+import 'package:it_arena/connections/API_KEYS.dart';
+import '../connections/api_calls.dart';
+import '../themes.dart';
 export 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -11,9 +14,11 @@ class AlarmCameraScreen extends StatefulWidget {
   const AlarmCameraScreen({
     super.key,
     required this.camera,
+    required this.alarmId,
   });
 
   final CameraDescription camera;
+  final String alarmId;
 
   @override
   AlarmCameraScreenState createState() => AlarmCameraScreenState();
@@ -26,7 +31,7 @@ class AlarmCameraScreenState extends State<AlarmCameraScreen> {
   final List<String> _refImagePaths = [
     "assets/images/ref_good.jpg"
   ];
-  String _selectRandomImagePath(){
+  String _selectRandomImagePath() {
     var random = Random();
     int index = random.nextInt(_refImagePaths.length);
     return _refImagePaths[index];
@@ -119,12 +124,12 @@ class AlarmCameraScreenState extends State<AlarmCameraScreen> {
                                         builder: (context, setState) {
                                           // 1초마다 count 감소
                                           Future.delayed(const Duration(seconds: 1), () {
-                                            if (count > 1) {
-                                              setState(() => count--);
-                                            } else {
-                                              Navigator.pop(context); // 카운트 끝나면 닫기
-                                            }
-                                          });
+                                              if (count > 1) {
+                                                setState(() => count--);
+                                              } else {
+                                                Navigator.pop(context); // 카운트 끝나면 닫기
+                                              }
+                                            });
 
                                           return Center(
                                             child: Container(
@@ -149,14 +154,176 @@ class AlarmCameraScreenState extends State<AlarmCameraScreen> {
 
                                   if (!context.mounted) return;
 
-                                  // 🔸 결과 화면으로 이동
-                                  await Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => AlarmCameraResultScreen(
-                                        imagePath: image.path,
-                                        refImagePath: _refImagePath,
-                                      ),
-                                    ),
+                                  await showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    barrierColor: Colors.black26,
+                                    builder: (context) {
+                                      return Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        spacing: 16,
+                                        children: [
+                                          Expanded(flex: 1, child: Container()),
+                                          Expanded(flex: 7, child: SizedBox(
+                                              width: 250,
+                                              child: Image.file(
+                                                fit: BoxFit.fitWidth,
+                                                scale: 0.5,
+                                                File(image.path)
+                                              ),
+                                            ),),
+                                          Expanded(
+                                            flex: 2,
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 200,
+                                              height: 100,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.circular(16)
+                                              ),
+                                              child: StatefulBuilder(
+                                                builder: (context, setState) {
+                                                  return FutureBuilder<bool>(
+                                                    future: checkPoseSuccessFromApi(
+                                                      junToken,
+                                                      imagePath: image.path,
+                                                      alarmId: widget.alarmId,
+                                                    ),
+                                                    builder: (context, snapshot) {
+                                                      if (snapshot.connectionState ==
+                                                        ConnectionState.waiting) {
+                                                        // 로딩 중일 때
+                                                        return Center(
+                                                          child: Column(
+                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            children: [
+                                                              CircularProgressIndicator(
+                                                                color: blue,),
+                                                              Text(
+                                                                '사진 분석 중 ...',
+                                                                //textAlign: TextAlign.center,
+                                                                style: TextStyle(
+                                                                  color: Colors.black54,
+                                                                  fontSize: 14,
+                                                                  fontWeight: FontWeight
+                                                                    .bold,
+                                                                ),
+                                                              )
+                                                            ],
+
+                                                          ),
+                                                        );
+                                                      } else if (snapshot.hasError) {
+                                                        // 에러 처리
+                                                        return Center(
+                                                          child: Text('에러 발생: ${snapshot
+                                                              .error}'));
+                                                      } else if (!snapshot.hasData) {
+                                                        // 데이터 없을 때
+                                                        return Container(
+                                                          padding: EdgeInsets.symmetric(
+                                                            vertical: 10),
+                                                          child: Text(
+                                                            '에러링',
+                                                            //textAlign: TextAlign.center,
+                                                            style: TextStyle(
+                                                              color: Colors.black54,
+                                                              fontSize: 14,
+                                                              fontWeight: FontWeight
+                                                                .bold,
+                                                            ),
+                                                          )
+                                                        );
+                                                      }
+                                                      final result = snapshot.data!;
+                                                      if (result) {
+                                                        Future.delayed(const Duration(seconds: 3), () {
+                                                            Navigator.popUntil(context, ModalRoute.withName('/alarm'));
+                                                          });
+                                                      }
+                                                      return result ?
+                                                        Row(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: [
+                                                            Icon(Icons.check, size: 32, color: primaryColor,),
+                                                            Text(
+                                                              '인증 성공',
+                                                              style: TextStyle(
+                                                                color: primaryColor,
+                                                                fontSize: 32,
+                                                                fontWeight: FontWeight.bold,
+                                                              ),
+                                                            ),
+                                                            SizedBox(width: 16,)
+                                                          ],
+                                                        )
+                                                        : Column(
+                                                          children: [
+                                                            Expanded(child:
+                                                              Row(
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                children: [
+                                                                  Icon(CupertinoIcons.xmark, size: 32, color: errorRed,),
+                                                                  Text(
+                                                                    '인증 실패',
+                                                                    style: TextStyle(
+                                                                      color: errorRed,
+                                                                      fontSize: 32,
+                                                                      fontWeight: FontWeight.bold,
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(width: 16,)
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              child:
+                                                              Column(
+                                                                children: [
+                                                                  Material(
+                                                                    color: gray2,
+                                                                    borderRadius: BorderRadius.circular(999),
+                                                                    elevation: 0,
+                                                                    child: InkWell(
+                                                                      onTap: () {
+
+                                                                        Navigator.pop(context);
+                                                                      },
+                                                                      borderRadius: BorderRadius.circular(999),
+                                                                      //highlightColor: primaryColorLight,
+                                                                      child:
+
+                                                                      Container(
+                                                                        decoration: BoxDecoration(
+                                                                          shape: BoxShape.circle,
+                                                                        ),
+                                                                        padding: EdgeInsets.all(16),
+                                                                        child: Icon(CupertinoIcons.restart, size: 32, color: Colors.black),
+                                                                      ),
+                                                                    )
+                                                                  ),
+                                                                  Text(
+                                                                    '재시도',
+                                                                    style: TextStyle(
+                                                                      fontSize: 24,
+                                                                      fontWeight: FontWeight.bold,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              )),
+                                                          ],
+                                                        );
+                                                    }
+                                                  );
+                                                },
+                                              ),
+                                            )),
+                                          Expanded(flex: 3, child: Container()),
+
+                                        ],
+                                      );
+                                    },
                                   );
 
                                   // 🔸 복귀 후 카메라 다시 시작

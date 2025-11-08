@@ -1,29 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:it_arena/constants.dart';
 
 class SleepProvider with ChangeNotifier {
-  final List<Map<String, String>> sleepMethods = [
-    {
-      'title': '기본 수면법',
-      'description': '가장 일반적인 단일 수면입니다.',
-    },
-    {
-      'title': '수면법 01: 호날두 수면법',
-      'description': '짧은 수면을 여러 번 나누어 잡니다.',
-    },
-    {
-      'title': '수면법 02: 드웨인 존슨 수면법',
-      'description': '이른 시간에 취침하고 일찍 일어납니다.',
-    },
-    {
-      'title': '수면법 03: 다빈치 수면법',
-      'description': '극단적인 다상 수면의 한 형태입니다.',
-    },
+  final List<String> wallpapers = [
+    "assets/images/wallpapers/default.png",
+    "assets/images/wallpapers/ronaldo.png",
+    "assets/images/wallpapers/dwayne.png",
+    "assets/images/wallpapers/davinci.png",
   ];
 
   int _selectedMethodIndex = 0;
   int get selectedMethodIndex => _selectedMethodIndex;
   String get selectedMethodTitle {
-    return sleepMethods[_selectedMethodIndex]['title']!;
+    return sleepInfo[_selectedMethodIndex]['title']!;
+  }
+  List<TimeSegment> get selectedMethodTimeSegments {
+    return sleepSegments[_selectedMethodIndex];
+  }
+
+  String get selectedMethodWallpaper {
+    return wallpapers[_selectedMethodIndex];
   }
 
   void setSelectedMethod(int index) {

@@ -44,7 +44,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
             barrierDismissible: true,
             builder: (context) {
               bool isButtonEnabled = false;
-              final TextEditingController _controller = TextEditingController();
+              final TextEditingController controller = TextEditingController();
 
               return StatefulBuilder(
                 builder: (context, setState) {
@@ -58,7 +58,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                       textAlign: TextAlign.center,
                     ),
                     content: TextField(
-                      controller: _controller,
+                      controller: controller,
                       maxLength: 10,
                       maxLengthEnforcement: MaxLengthEnforcement.none,
                       decoration: const InputDecoration(
@@ -88,7 +88,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                               setState(() {
                                   isButtonEnabled = false;
                                 });
-                              final nickname = _controller.text.trim();
+                              final nickname = controller.text.trim();
                               final success = await addFriend(nickname);
                               setState(() {
                                   isButtonEnabled = true;
@@ -171,7 +171,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                       child: Row(
                         spacing: 12,
                         children: [
-                          Text(friend.nickname!, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+                          Text(friend.nickname, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,

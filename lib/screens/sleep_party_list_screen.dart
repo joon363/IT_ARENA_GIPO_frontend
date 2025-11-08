@@ -13,10 +13,12 @@ class SleepPartyListScreen extends StatefulWidget {
 }
 
 class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
-  late Future<List<Alarm>> _alarmPartiesFuture;
+  late final Future<List<Alarm>> _alarmPartiesFuture;
+  List<Alarm> alarms = [];
   Duration duration = const Duration(hours: 1, minutes: 30);
   int selectedHour = 0;
   int selectedMinute = 0;
+  bool onInit = true;
   final List<int> hours = List.generate(24, (index) => index);
   final List<int> minutes = [0, 15, 30, 45];
 
@@ -96,9 +98,23 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
                           borderRadius: BorderRadius.circular(10),
                           child: InkWell(
                             borderRadius: BorderRadius.circular(10),
-                            //highlightColor: Colors.white10,
-                            onTap: () {
-                              // TODO: 서버에 요청
+                            highlightColor: Colors.red,
+                            onTap: () async {
+                              await createAlarm(
+                                junToken,
+                                "alarmTest",
+                                selectedHour,
+                                selectedMinute,
+                                "date",
+                                "pose_1",
+                                [
+                                  "0b6ea4fd-7182-41cc-a9a4-93dc9ab6e950", "d4cd00dd-75c5-420c-a95c-34ed76e161a0", "7f27800b-c7ab-4cf5-ba33-14739aa11ca8", "88866b77-0d0b-4da1-874b-6cdd9c8c9052"
+                                ]
+                              );
+                              var res = await fetchAlarms(junToken);
+                              setState(() {
+                                  alarms = res;
+                                });
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -135,7 +151,6 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
   @override
   Widget build(BuildContext context) {
     const double itemExtent = 40.0;
-    bool isParticipated = false;
 
     return Scaffold(
       appBar: AppBar(automaticallyImplyLeading: false, title: const Text("수면팟 목록", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
@@ -150,22 +165,28 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text("참여 가능한 파티가 없습니다."));
           }
-
-          final List<Alarm> alarms = snapshot.data!;
+          if (onInit) {
+            final List<Alarm> a = snapshot.data!;
+            alarms = a;
+            onInit = false;
+          }
 
           return ListView.builder(
             itemCount: alarms.length,
             itemBuilder: (context, index) {
               final Alarm alarm = alarms[index];
+              bool isParticipated = false;
               for (Member member in alarm.members){
-                if (member.userId==junToken){
-                  if(member.verified) isParticipated=true;
+                if (member.userId == junToken) {
+                  if (member.verified) {
+                    isParticipated = true;
+                  }
                 }
               }
               return Container(
                 margin: EdgeInsets.only(right: 12, left: 12, top: 12),
                 padding: EdgeInsets.symmetric(horizontal: 24),
-                height: 87,
+                height: 100,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   color: Colors.white
@@ -183,12 +204,12 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
                             ),
                           ),
                           Expanded(
-                              child: Padding(padding: EdgeInsets.symmetric(vertical: 8),
+                            child: Padding(padding: EdgeInsets.symmetric(vertical: 8),
                               child: SingleChildScrollView(
                                 child: Text(alarm.members.map((m) => m.nickname).join('\n'),
                                   style: TextStyle(color: gray, fontSize: 14, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis)),
                               ),
-                              )
+                            )
                           )
                         ],
                       ),
@@ -231,54 +252,55 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-        _showDialog(
-          SizedBox(
-            height: 200,
-            child:
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // 시 Picker
-                Expanded(
-                  child: CupertinoPicker(
-                    magnification: 1.2,
-                    squeeze: 1.1,
-                    useMagnifier: true,
-                    itemExtent: itemExtent,
-                    scrollController: FixedExtentScrollController(initialItem: selectedHour),
-                    onSelectedItemChanged: (int index) {
-                      setState(() => selectedHour = index);
-                    },
-                    children: List<Widget>.generate(
-                      hours.length,
-                      (int index) => Center(child: Text('${hours[index]}시')),
+        onPressed: () {
+          _showDialog(
+            SizedBox(
+              height: 200,
+              child:
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // 시 Picker
+                  Expanded(
+                    child: CupertinoPicker(
+                      magnification: 1.2,
+                      squeeze: 1.1,
+                      useMagnifier: true,
+                      itemExtent: itemExtent,
+                      scrollController: FixedExtentScrollController(initialItem: selectedHour),
+                      onSelectedItemChanged: (int index) {
+                        setState(() => selectedHour = index);
+                      },
+                      children: List<Widget>.generate(
+                        hours.length,
+                        (int index) => Center(child: Text('${hours[index]}시')),
+                      ),
                     ),
                   ),
-                ),
-                // 분 Picker
-                Expanded(
-                  child: CupertinoPicker(
-                    magnification: 1.2,
-                    squeeze: 1.1,
-                    useMagnifier: true,
-                    itemExtent: itemExtent,
-                    scrollController: FixedExtentScrollController(
-                      initialItem: minutes.indexOf(selectedMinute),
-                    ),
-                    onSelectedItemChanged: (int index) {
-                      setState(() => selectedMinute = minutes[index]);
-                    },
-                    children: List<Widget>.generate(
-                      minutes.length,
-                      (int index) => Center(child: Text('${minutes[index]}분')),
+                  // 분 Picker
+                  Expanded(
+                    child: CupertinoPicker(
+                      magnification: 1.2,
+                      squeeze: 1.1,
+                      useMagnifier: true,
+                      itemExtent: itemExtent,
+                      scrollController: FixedExtentScrollController(
+                        initialItem: minutes.indexOf(selectedMinute),
+                      ),
+                      onSelectedItemChanged: (int index) {
+                        setState(() => selectedMinute = minutes[index]);
+                      },
+                      children: List<Widget>.generate(
+                        minutes.length,
+                        (int index) => Center(child: Text('${minutes[index]}분')),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          )
-        ),
+                ],
+              ),
+            )
+          );
+        },
         backgroundColor: primaryColor,
 
         shape: CircleBorder(),

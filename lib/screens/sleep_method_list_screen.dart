@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../constants.dart';
 import '../providers/sleep_provider.dart';
 
 class SleepMethodListScreen extends StatefulWidget {
@@ -45,12 +46,12 @@ class _SleepMethodListScreenState extends State<SleepMethodListScreen> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
-                    padding: EdgeInsets.only(top: 14.0, bottom: 14.0, left: 65.0, right: 14.0),
-                    child: Text(
-                      '수면법 목록', // 이미지에 맞게 텍스트 변경
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      padding: EdgeInsets.only(top: 14.0, bottom: 14.0, left: 65.0, right: 14.0),
+                      child: Text(
+                        '수면법 목록', // 이미지에 맞게 텍스트 변경
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
                   ),
                 ],
               ),
@@ -66,12 +67,12 @@ class _SleepMethodListScreenState extends State<SleepMethodListScreen> {
                 // ListView.builder를 사용해 카드 목록을 동적으로 생성
                 child: ListView.builder(
                   padding: const EdgeInsets.all(20.0), // 목록 전체에 여백
-                  itemCount: sleepProvider.sleepMethods.length, // 카드 개수 (4개)
+                  itemCount: sleepInfo.length, // 카드 개수 (4개)
                   itemBuilder: (context, index) {
-                    final method = sleepProvider.sleepMethods[index];
+                    final method = sleepInfo[index];
                     return _buildMethodCard(
                       title: method['title']!,
-                      description: method['description']!,
+                      description: method['summary']!,
                       index: index,
                     );
                   },
@@ -92,7 +93,7 @@ class _SleepMethodListScreenState extends State<SleepMethodListScreen> {
   }) {
     // 현재 카드가 선택되었는지 확인
     final int currentIndex = 
-    Provider.of<SleepProvider>(context).selectedMethodIndex;
+      Provider.of<SleepProvider>(context).selectedMethodIndex;
     final bool isSelected = (index == currentIndex);
 
     return Padding(
@@ -107,7 +108,7 @@ class _SleepMethodListScreenState extends State<SleepMethodListScreen> {
           onTap: () {
             // 카드 탭 시 선택된 수면법 인덱스 업데이트
             Provider.of<SleepProvider>(context, listen: false)
-                .setSelectedMethod(index);
+              .setSelectedMethod(index);
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
@@ -148,7 +149,7 @@ class _SleepMethodListScreenState extends State<SleepMethodListScreen> {
                     height: 24,
                   ),
                   onPressed: () {
-                    if(index == 0) {
+                    if (index == 0) {
                       Navigator.pushNamed(context, '/sleep_method_normal');
                     } else if (index == 1) {
                       Navigator.pushNamed(context, '/sleep_method_Ronaldo');

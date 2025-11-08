@@ -22,7 +22,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double _iconSize = 30;
+    double iconSize = 30;
     return Scaffold(
       body: _pages[_selectedIndex],
 
@@ -42,11 +42,11 @@ class _MainScreenState extends State<MainScreen> {
                     height: double.infinity,
                     alignment: Alignment.center,
                     child: Image.asset(
-                      _selectedIndex == 0?
-                      'assets/images/alarm-clock_active.png' :
-                      'assets/images/alarm-clock.png',
-                      width: _iconSize,
-                      height: _iconSize,
+                      _selectedIndex == 0 ?
+                        'assets/images/alarm-clock_active.png' :
+                        'assets/images/alarm-clock.png',
+                      width: iconSize,
+                      height: iconSize,
                     ),
                   ),
                 ),
@@ -61,11 +61,11 @@ class _MainScreenState extends State<MainScreen> {
                     height: double.infinity,
                     alignment: Alignment.center,
                     child: Image.asset(
-                      _selectedIndex == 1?
-                      'assets/images/bell_active.png' :
-                      'assets/images/bell.png',
-                      width: _iconSize,
-                      height: _iconSize,
+                      _selectedIndex == 1 ?
+                        'assets/images/bell_active.png' :
+                        'assets/images/bell.png',
+                      width: iconSize,
+                      height: iconSize,
                     ),
                   ),
                 ),
@@ -80,11 +80,11 @@ class _MainScreenState extends State<MainScreen> {
                     height: double.infinity,
                     alignment: Alignment.center,
                     child: Image.asset(
-                      _selectedIndex == 2?
-                      'assets/images/users_active.png' :
-                      'assets/images/users.png',
-                      width: _iconSize,
-                      height: _iconSize,
+                      _selectedIndex == 2 ?
+                        'assets/images/users_active.png' :
+                        'assets/images/users.png',
+                      width: iconSize,
+                      height: iconSize,
                     ),
                   ),
                 ),

@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class User {
   final String id;
@@ -76,18 +74,18 @@ class Friend {
       createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
       updatedAt: DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
       user: json['user'] != null ? User.fromJson(json['user']) : User(
-        id: '',
-        email: '',
-        username: '',
-        fullName: '',
-        nickname: '',
-        room: '',
-        tel: '',
-        sleeptype: '',
-        isActive: false,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-      ),
+          id: '',
+          email: '',
+          username: '',
+          fullName: '',
+          nickname: '',
+          room: '',
+          tel: '',
+          sleeptype: '',
+          isActive: false,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        ),
     );
   }
 }
