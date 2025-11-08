@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import '../models/party_model.dart';
 import '../models/userStatus.dart';
 import '../models/friend_model.dart';
+const String baseUrl = 'https://your.api.endpoint';
 
 Future<bool> checkPoseSuccessFromApi({
   required String imagePath, // Flutter asset 경로
@@ -76,8 +77,7 @@ Future<List<Friend>> fetchFriendsDummy() async {
       "is_active": true,
       "location": "기숙사 7동 312호",
       "phone": "010-1234-5678",
-      "preferSleepTime": "08:30",
-      "preferWakeTime": "08:30",
+      "preferRoutine": "호날두 수면법",
       "friend_username": "김하늘"
     },
     {
@@ -87,8 +87,7 @@ Future<List<Friend>> fetchFriendsDummy() async {
       "is_active": false,
       "location": "기숙사 9동 214호",
       "phone": "010-9876-5432",
-      "preferSleepTime": "09:00",
-      "preferWakeTime": "09:00",
+      "preferRoutine": "드웨인 수면법",
       "friend_username": "이준호"
     },
     {
@@ -98,8 +97,7 @@ Future<List<Friend>> fetchFriendsDummy() async {
       "is_active": true,
       "location": "기숙사 5동 120호",
       "phone": "010-5555-8888",
-      "preferSleepTime": "07:45",
-      "preferWakeTime": "07:45",
+      "preferRoutine": "기본 수면법",
       "friend_username": "박지현"
     },
     {
@@ -109,8 +107,57 @@ Future<List<Friend>> fetchFriendsDummy() async {
       "is_active": false,
       "location": "기숙사 3동 410호",
       "phone": "010-2222-9999",
-      "preferSleepTime": "10:00",
-      "preferWakeTime": "10:00",
+      "preferRoutine": "다빈치 수면법",
+      "friend_username": "정유진"
+    },
+    {
+      "id": "4",
+      "user_id": "u001",
+      "friend_id": "f004",
+      "is_active": false,
+      "location": "기숙사 3동 410호",
+      "phone": "010-2222-9999",
+      "preferRoutine": "다빈치 수면법",
+      "friend_username": "정유진"
+    },
+    {
+      "id": "4",
+      "user_id": "u001",
+      "friend_id": "f004",
+      "is_active": false,
+      "location": "기숙사 3동 410호",
+      "phone": "010-2222-9999",
+      "preferRoutine": "다빈치 수면법",
+      "friend_username": "정유진"
+    },
+    {
+      "id": "4",
+      "user_id": "u001",
+      "friend_id": "f004",
+      "is_active": false,
+      "location": "기숙사 3동 410호",
+      "phone": "010-2222-9999",
+      "preferRoutine": "다빈치 수면법",
+      "friend_username": "정유진"
+    },
+    {
+      "id": "4",
+      "user_id": "u001",
+      "friend_id": "f004",
+      "is_active": false,
+      "location": "기숙사 3동 410호",
+      "phone": "010-2222-9999",
+      "preferRoutine": "다빈치 수면법",
+      "friend_username": "정유진"
+    },
+    {
+      "id": "4",
+      "user_id": "u001",
+      "friend_id": "f004",
+      "is_active": false,
+      "location": "기숙사 3동 410호",
+      "phone": "010-2222-9999",
+      "preferRoutine": "다빈치 수면법",
       "friend_username": "정유진"
     },
   ];
@@ -148,10 +195,26 @@ Future<List<AlarmParty>> fetchAlarmParties() async {
     },
     {
       "time": "09:15",
-      "members": ["user2", "user6", "user7", "user8"],
+      "members": ["user2", "user6", "user7", "user8", "user8", "user8",],
       "isParticipating": true,
     },
   ];
 
   return responseData.map((json) => AlarmParty.fromJson(json)).toList();
+}
+
+Future<bool> addFriend(String nickname) async {
+  await Future.delayed(const Duration(seconds: 1)); // 네트워크 지연 시뮬레이션
+  return false; //TODO: call API
+  final url = Uri.parse('$baseUrl/friends');
+  final headers = {'Content-Type': 'application/json'};
+  final body = jsonEncode({'nickname': nickname});
+
+  final response = await http.post(url, headers: headers, body: body);
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    return false;
+  }
 }

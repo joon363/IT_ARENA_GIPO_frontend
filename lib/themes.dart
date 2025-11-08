@@ -25,7 +25,7 @@ const Color pink = Color(0xFFFE9BA7);
 class AppTheme {
   static ThemeData lightTheme(BuildContext context) {
     return ThemeData(
-        //fontFamily: "SF",
+        fontFamily: "Pretendard",
         colorSchemeSeed: Colors.white,
         canvasColor: Colors.white,
         dividerColor: Colors.white,
@@ -63,20 +63,20 @@ class AppTheme {
               color: gray2
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(999),
-            borderSide: BorderSide(color: gray2),
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: gray),
           ),
           errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(999),
+            borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(color: errorRed),
           ),
           focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(999),
+            borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(color: errorRed),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(999),
-            borderSide: const BorderSide(color: blue, width: 2),
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: orange, width: 2),
           ),
         ),
         switchTheme: SwitchThemeData(

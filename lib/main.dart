@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'ITARENA',
       theme: AppTheme.lightTheme(context),
       // 첫 화면: 로그인
-      initialRoute: '/',
+      initialRoute: '/friends',
       routes: {
         '/': (context) => const HomeScreen(),
         '/alarm': (context) => const AlarmScreen(),

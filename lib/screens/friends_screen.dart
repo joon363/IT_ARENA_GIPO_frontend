@@ -15,6 +15,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
   late Future<List<Friend>> _friendsFuture;
   final _controller = TextEditingController();
   bool isButtonEnabled = false;
+  bool isWaitingForResponse = false;
 
   @override
   void initState() {
@@ -26,8 +27,10 @@ class _FriendsScreenState extends State<FriendsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('친구 목록'),
+        automaticallyImplyLeading: false,
+        title: const Text("친구 목록", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
       ),
+      backgroundColor: backGround,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           bool copied = false;
@@ -41,36 +44,13 @@ class _FriendsScreenState extends State<FriendsScreen> {
               return StatefulBuilder(
                 builder: (context, setState) {
                   return AlertDialog(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          "내 아이디: user0",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-
-                        GestureDetector(
-                          onTap: copied?null:() async {
-                            await Clipboard.setData(const ClipboardData(text: "user0"));
-                            setState(() {
-                              copied = true;
-                            });
-                          },
-                          child: Text(
-                            copied?"복사 완료":"복사",
-                            style: TextStyle(
-                              color: copied?gray2:orange,
-                              fontSize: 14,
-                              //fontWeight: FontWeight.bold,
-                              //decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                      ],
+                    title: const Text(
+                      "친구의 아이디를 입력해주세요",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                     content: TextField(
                       controller: _controller,
@@ -82,8 +62,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
                       ),
                       onChanged: (value) {
                         setState(() {
-                          isButtonEnabled = value.length <= 10 && value.isNotEmpty;
-                        });
+                            isButtonEnabled = !isWaitingForResponse && (value.length <= 10 && value.isNotEmpty);
+                          });
                       },
                     ),
                     actionsAlignment: MainAxisAlignment.center,
@@ -99,10 +79,39 @@ class _FriendsScreenState extends State<FriendsScreen> {
                             ),
                           ),
                           onPressed: isButtonEnabled
-                              ? () {
-                            Navigator.pop(context);
-                          }
-                              : null,
+                            ? () async {
+                              setState(() {
+                                  isButtonEnabled = false;
+                                });
+                              final nickname = _controller.text.trim();
+                              final success = await addFriend(nickname);
+                              setState(() {
+                                  isButtonEnabled = true;
+                                });
+
+                              if (success) {
+                                Navigator.pop(context);
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text('오류'),
+                                    content: const Text('존재하지 않는 닉네임이거나 요청에 실패했습니다.'),
+                                    actions: [
+                                      TextButton(
+                                        style: ButtonStyle(
+                                          overlayColor: WidgetStateProperty.all(orange.withAlpha(100)),
+
+                                        ),
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('확인', style: TextStyle(color: orange),),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            }
+                            : null,
                           child: const Text(
                             "친구 추가",
                             style: TextStyle(
@@ -120,64 +129,81 @@ class _FriendsScreenState extends State<FriendsScreen> {
             },
           );
         },
-        backgroundColor:gray,
-
-        shape: CircleBorder(side: BorderSide(color: orange, width: 5)),
+        backgroundColor: orange,
+        shape: CircleBorder(),
         elevation: 2,
         child: Icon(Icons.person_add_alt_1, color: Colors.black, size: 30,),
       ),
-      body: Padding(padding: EdgeInsets.symmetric(horizontal: 16),
-        child: FutureBuilder<List<Friend>>(
-          future: _friendsFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('오류 발생: ${snapshot.error}'));
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text('친구가 없습니다.'));
-            }
+      body: FutureBuilder<List<Friend>>(
+        future: _friendsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text("오류 발생: ${snapshot.error}"));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text("친구가 없습니다."));
+          }
 
-            final friends = snapshot.data!;
+          final friends = snapshot.data!;
 
-            return ListView.builder(
-              itemCount: friends.length,
-              itemBuilder: (context, index) {
-                final friend = friends[index];
-                return Container(
-                  margin: EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: gray2,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+          return ListView.builder(
+            itemCount: friends.length,
+            itemBuilder: (context, index) {
+              final friend = friends[index];
+              return Container(
+                margin: EdgeInsets.only(right: 12, left: 12, top: 12),
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                height: 87,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Colors.white
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        spacing: 12,
                         children: [
-                        Text(friend.friendUsername),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(friend.location),
-                            Text('📞 ${friend.phone}'),
-                          ],
-                        ),
-                      ],),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('선호 취침 시간:${friend.preferSleepTime}'),
-                          Text('선호 기상 시간:${friend.preferWakeTime}'),
+                          Text(friend.friendUsername, style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(friend.location, style: TextStyle(color: gray, fontSize: 12, fontWeight: FontWeight.bold),),
+                              Text(friend.phone, style: TextStyle(color: gray, fontSize: 12, fontWeight: FontWeight.bold),),
+
+                            ],
+                          )
                         ],
                       ),
-                    ],
-                  ),
-                );
-              },
-            );
-          },
-        ),),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      height: 39,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: orange
+                      ),
+                      child: Text(
+                        friend.preferRoutine,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+
+                  ]
+                )
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

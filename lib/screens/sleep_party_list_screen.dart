@@ -83,35 +83,35 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
 
                     ),
                     Expanded(child: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: orange, width: 2),
-                        borderRadius: BorderRadius.circular(10),
-                        color: orange
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(10),
-                        child: InkWell(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: orange, width: 2),
                           borderRadius: BorderRadius.circular(10),
-                          //highlightColor: Colors.white10,
-                          onTap: () {
-                            // TODO: 서버에 요청
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            width: double.infinity,  // ✅ InkWell이 전체 채우게
-                            //height: double.infinity, // ✅ 높이도 맞춰줌
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                            child: Text(
-                              "확인",
-                              style: TextStyle(fontSize: 24, fontWeight:FontWeight.bold, color: Colors.white),
+                          color: orange
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(10),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(10),
+                            //highlightColor: Colors.white10,
+                            onTap: () {
+                              // TODO: 서버에 요청
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              width: double.infinity,  // ✅ InkWell이 전체 채우게
+                              //height: double.infinity, // ✅ 높이도 맞춰줌
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                              child: Text(
+                                "확인",
+                                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    )
+                      )
 
                     ),
                   ],
@@ -134,7 +134,7 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
     const double itemExtent = 40.0;
 
     return Scaffold(
-      appBar: AppBar(automaticallyImplyLeading: false, title: const Text("수면팟 목록", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+      appBar: AppBar(automaticallyImplyLeading: false, title: const Text("수면팟 목록", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
       backgroundColor: backGround,
       body: FutureBuilder<List<AlarmParty>>(
         future: _alarmPartiesFuture,
@@ -154,8 +154,9 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
             itemBuilder: (context, index) {
               final party = parties[index];
               return Container(
-                margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                padding: EdgeInsets.all(16),
+                margin: EdgeInsets.only(right: 12, left: 12, top: 12),
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                height: 87,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   color: Colors.white
@@ -167,7 +168,11 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
                       child: Row(
                         spacing: 12,
                         children: [
-                          Text(party.time, style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),),
+                          SizedBox(width: 95,
+                            child:
+                            Text(party.time, style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                            ),
+                          ),
                           Expanded(child: Text('멤버: ${party.members.toString()}',
                               style: TextStyle(color: gray, fontSize: 14, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis)),
                           )
@@ -182,10 +187,10 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
                         borderRadius: BorderRadius.circular(8),
                         enableFeedback: !party.isParticipating,
                         onTap: party.isParticipating
-                            ? null
-                            : () {
-                          //TODO: call API;
-                        },
+                          ? null
+                          : () {
+                            //TODO: call API;
+                          },
                         splashColor: party.isParticipating ? Colors.transparent : null,
                         highlightColor: party.isParticipating ? Colors.transparent : null,
                         child: Container(
@@ -233,7 +238,7 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
                     },
                     children: List<Widget>.generate(
                       hours.length,
-                          (int index) => Center(child: Text('${hours[index]}시')),
+                      (int index) => Center(child: Text('${hours[index]}시')),
                     ),
                   ),
                 ),
@@ -252,7 +257,7 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
                     },
                     children: List<Widget>.generate(
                       minutes.length,
-                          (int index) => Center(child: Text('${minutes[index]}분')),
+                      (int index) => Center(child: Text('${minutes[index]}분')),
                     ),
                   ),
                 ),
