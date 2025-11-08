@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+const Color primaryColor = Color(0xFFFF9F31);
 const Color blue = Color(0xFF75A9ED);
 const Color blue3 = Color(0xFFE6F4FF);
 const Color green = Color(0xFF4CC473);
@@ -76,7 +76,7 @@ class AppTheme {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: orange, width: 2),
+            borderSide: const BorderSide(color: primaryColor, width: 2),
           ),
         ),
         switchTheme: SwitchThemeData(

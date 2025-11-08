@@ -14,68 +14,6 @@ class _SleepMethodListScreenState extends State<SleepMethodListScreen> {
   Widget build(BuildContext context) {
     final sleepProvider = Provider.of<SleepProvider>(context);
     return Scaffold(
-      // 1. 하단 Navbar (home_screen.dart와 동일)
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        child: Container(
-          height: 60.0,
-          child: Row(
-            children: [
-              // 1. 버튼 (왼쪽)
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/');
-                  },
-                  child: Container(
-                    height: double.infinity,
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      'assets/images/alarm-clock_active.png',
-                      width: 35,
-                      height: 35,
-                    ),
-                  ),
-                ),
-              ),
-              // 2. /alarm 버튼 (가운데)
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/alarm');
-                  },
-                  child: Container(
-                    height: double.infinity,
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      'assets/images/bell.png',
-                      width: 35,
-                      height: 35,
-                    ),
-                  ),
-                ),
-              ),
-              // 3. /friend 버튼 (오른쪽)
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    // Navigator.pushNamed(context, '/friend');
-                  },
-                  child: Container(
-                    height: double.infinity,
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      'assets/images/users.png',
-                      width: 35,
-                      height: 35,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
 
       // 2. 본문 (home_screen.dart와 동일한 구조)
       body: SafeArea(

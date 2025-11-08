@@ -15,76 +15,11 @@ class _HomeScreenState extends State<HomeScreen> {
   // 예: double _progress = 0.0;
   // 현재는 0.75 (75%)로 고정하여 디자인을 보여줍니다.
   final double _progress = 0.75; // 0.0 ~ 1.0 사이의 값
+  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     final sleepProvider = Provider.of<SleepProvider>(context);
     return Scaffold(
-      // 1. 하단 Navbar
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        child: Container(
-          height: 60.0, // 하단 바 높이
-          child: Row(
-            // Row의 자식들을 1:1:1 비율로 나누기 위해 Expanded 사용
-            children: [
-              // 1. 버튼 (왼쪽)
-              Expanded(
-                child: InkWell(
-                  onTap: () {},
-                  child: Container(
-                    height: double.infinity,
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      'assets/images/alarm-clock_active.png',
-                      width: 35,
-                      height: 35,
-                    ),
-                  ),
-                ),
-              ),
-
-              // 2. /alarm 버튼 (가운데, sleep_mode.png)
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    // 2번 버튼 기능
-                    Navigator.pushNamed(context, '/alarm');
-                  },
-                  child: Container(
-                    height: double.infinity,
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      'assets/images/bell.png',
-                      width: 35,
-                      height: 35,
-                    ),
-                  ),
-                ),
-              ),
-
-              // 3. /friend 버튼 (오른쪽)
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    // 3번 버튼 기능
-                    // Navigator.pushNamed(context, '/friend'); // TODO: '/friend' 라우트 미정
-
-                  },
-                  child: Container(
-                    height: double.infinity,
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      'assets/images/users.png',
-                      width: 35,
-                      height: 35,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
       body: SafeArea(
         child: Column(
           children: [

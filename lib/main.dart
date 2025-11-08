@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/sleep_provider.dart';
 import 'themes.dart';
+import 'screens/main_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/alarm_screen.dart';
+import 'screens/friends_screen.dart';
+import 'screens/sleep_party_list_screen.dart';
 import 'screens/sleep_method_list.dart';
 import 'screens/sleep_method_normal.dart';
 import 'screens/sleep_method_Ronaldo.dart';
@@ -31,8 +34,11 @@ class MyApp extends StatelessWidget {
       // 첫 화면: 로그인
       initialRoute: '/',
       routes: {
-        '/': (context) => const HomeScreen(),
+        '/': (context) => const MainScreen(),
+        '/home': (context) => const HomeScreen(),
         '/alarm': (context) => const AlarmScreen(),
+        '/sleep_party_list': (context) => const SleepPartyListScreen(),
+        '/friends': (context) => const FriendsScreen(),
         '/sleep_method_list': (context) => const SleepMethodListScreen(),
         '/sleep_method_normal': (context) => const SleepMethodNormalScreen(),
         '/sleep_method_Ronaldo': (context) => const SleepMethodRonaldoScreen(),

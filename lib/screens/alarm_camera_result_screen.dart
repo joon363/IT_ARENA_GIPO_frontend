@@ -138,11 +138,11 @@ class _AlarmCameraResultScreenState extends State<AlarmCameraResultScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.check, size: 64, color: orange,),
+                          Icon(Icons.check, size: 64, color: primaryColor,),
                           Text(
                             '인증 성공',
                             style: TextStyle(
-                              color: Colors.orange,
+                              color: primaryColor,
                               fontSize: 48,
                               fontWeight: FontWeight.bold,
                             ),

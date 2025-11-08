@@ -51,7 +51,7 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
                       child: Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          border: Border.all(color: orange, width: 2),
+                          border: Border.all(color: primaryColor, width: 2),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Material(
@@ -73,7 +73,7 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
-                                  color: orange,
+                                  color: primaryColor,
                                 ),
                               ),
                             ),
@@ -85,9 +85,9 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
                     Expanded(child: Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          border: Border.all(color: orange, width: 2),
+                          border: Border.all(color: primaryColor, width: 2),
                           borderRadius: BorderRadius.circular(10),
-                          color: orange
+                          color: primaryColor
                         ),
                         child: Material(
                           color: Colors.transparent,
@@ -115,7 +115,8 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
 
                     ),
                   ],
-                )
+                ),
+                SizedBox(height: 50,)
               ],)
           ),
         )
@@ -173,14 +174,19 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
                             Text(party.time, style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                             ),
                           ),
-                          Expanded(child: Text('멤버: ${party.members.toString()}',
-                              style: TextStyle(color: gray, fontSize: 14, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis)),
+                          Expanded(
+                              child: Padding(padding: EdgeInsets.symmetric(vertical: 8),
+                              child: SingleChildScrollView(
+                                child: Text(party.members.join('\n'),
+                                  style: TextStyle(color: gray, fontSize: 14, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis)),
+                              ),
+                              )
                           )
                         ],
                       ),
                     ),
                     Material(
-                      color: party.isParticipating ? gray : orange,
+                      color: party.isParticipating ? gray : primaryColor,
                       borderRadius: BorderRadius.circular(8),
                       elevation: 0,
                       child: InkWell(
@@ -265,7 +271,7 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
             ),
           )
         ),
-        backgroundColor: orange,
+        backgroundColor: primaryColor,
 
         shape: CircleBorder(),
         elevation: 2,

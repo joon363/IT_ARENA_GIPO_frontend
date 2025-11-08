@@ -64,7 +64,7 @@ class _AlarmWaitingScreenState extends State<AlarmWaitingScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
+                      backgroundColor: primaryColor,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -108,7 +108,7 @@ class _AlarmWaitingScreenState extends State<AlarmWaitingScreen> {
 
     if (isAwake && user.imageUrl != null && user.imageUrl!.isNotEmpty) {
       return Container(
-        color: Colors.orange,
+        color: primaryColor,
         child: Column(
           children: [
             Expanded(
@@ -188,7 +188,7 @@ class _AlarmWaitingScreenState extends State<AlarmWaitingScreen> {
                   children: [
                     // 첫 칸: 나
                     Container(
-                      color: Colors.orange,
+                      color: primaryColor,
                       child: Column(
                         children: [
                           Expanded(

@@ -26,6 +26,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text("친구 목록", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
@@ -72,7 +74,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                         width: double.infinity,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: isButtonEnabled ? Colors.orange : gray3,
+                            backgroundColor: isButtonEnabled ? primaryColor : gray3,
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -100,11 +102,11 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                     actions: [
                                       TextButton(
                                         style: ButtonStyle(
-                                          overlayColor: WidgetStateProperty.all(orange.withAlpha(100)),
+                                          overlayColor: WidgetStateProperty.all(primaryColor.withAlpha(100)),
 
                                         ),
                                         onPressed: () => Navigator.pop(context),
-                                        child: const Text('확인', style: TextStyle(color: orange),),
+                                        child: const Text('확인', style: TextStyle(color: primaryColor),),
                                       ),
                                     ],
                                   ),
@@ -129,10 +131,10 @@ class _FriendsScreenState extends State<FriendsScreen> {
             },
           );
         },
-        backgroundColor: orange,
+        backgroundColor: primaryColor,
         shape: CircleBorder(),
         elevation: 2,
-        child: Icon(Icons.person_add_alt_1, color: Colors.black, size: 30,),
+        child: Icon(Icons.person_add_alt_1, color: Colors.white, size: 30,),
       ),
       body: FutureBuilder<List<Friend>>(
         future: _friendsFuture,
@@ -185,7 +187,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        color: orange
+                        color: primaryColor
                       ),
                       child: Text(
                         friend.preferRoutine,
