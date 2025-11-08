@@ -1,4 +1,4 @@
-import 'package:it_arena/theme.dart';
+import 'package:it_arena/themes.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {

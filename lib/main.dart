@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
-import 'theme.dart';
+import 'themes.dart';
 import 'screens/home_screen.dart';
+import 'screens/alarm_camera_screen.dart';
+import 'package:camera/camera.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 카메라 리스트 가져오기
+  final cameras = await availableCameras();
+  final firstCamera = cameras.first;
+  runApp(MyApp(camera: firstCamera));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final CameraDescription camera;
+
+  const MyApp({super.key, required this.camera});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +27,8 @@ class MyApp extends StatelessWidget {
       // 첫 화면: 로그인
       initialRoute: '/',
       routes: {
-        '/': (context) => const HomeScreen()
+        '/': (context) => const HomeScreen(),
+        '/alarm': (context) => AlarmCameraScreen(camera: camera),
       },
     );
   }
