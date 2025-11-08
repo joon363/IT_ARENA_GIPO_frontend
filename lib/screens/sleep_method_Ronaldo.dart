@@ -143,7 +143,7 @@ class SleepMethodRonaldoScreen extends StatelessWidget {
                             ),
                             const Divider(height: 20),
                             Text(
-                              '- 가장 일반적인 수면 방식입니다.\n- 하루에 한 번, 밤에 몰아서 잡니다.', // 예시 텍스트
+                              '- 하루 90분씩 5회 나누어 잡니다.\n- 수면 전분가의 코칭을 받아 신체 리듬을 관리하\n   는 것으로 알려져 있습니다.', // 예시 텍스트
                               style: const TextStyle(fontSize: 16, height: 1.5),
                             ),
                             const SizedBox(height: 25),
@@ -156,7 +156,7 @@ class SleepMethodRonaldoScreen extends StatelessWidget {
                             ),
                             const Divider(height: 20),
                             Text(
-                              '- 대부분의 사람들에게 적합합니다.\n- 7~8시간의 연속 수면을 권장합니다.', // 예시 텍스트
+                              '- 90분 수면 주기에 맞춰 신체 회복의 질을 높이\n   는 것을 목표로 합니다.\n- 훈련 및 경기 일정에 맞춰 유연하게 휴식 시간\n   을 확보할 수 있습니다.', // 예시 텍스트
                               style: const TextStyle(fontSize: 16, height: 1.5),
                             ),
                           ],

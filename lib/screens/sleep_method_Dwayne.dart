@@ -143,7 +143,7 @@ class SleepMethodDwayneScreen extends StatelessWidget {
                             ),
                             const Divider(height: 20),
                             Text(
-                              '- 가장 일반적인 수면 방식입니다.\n- 하루에 한 번, 밤에 몰아서 잡니다.', // 예시 텍스트
+                              '- 매일 새벽 3~4시에 기상하는 극단적인 얼리버\n   드 방식입니다.\n- 하루에 총 4~5시간 정도의 짧은 수면을 취합\n   니다.', // 예시 텍스트
                               style: const TextStyle(fontSize: 16, height: 1.5),
                             ),
                             const SizedBox(height: 25),
@@ -156,7 +156,7 @@ class SleepMethodDwayneScreen extends StatelessWidget {
                             ),
                             const Divider(height: 20),
                             Text(
-                              '- 대부분의 사람들에게 적합합니다.\n- 7~8시간의 연속 수면을 권장합니다.', // 예시 텍스트
+                              '- 이른 아침 시간을 확보하여 운동 및 바쁜 스케\n   줄 소화에 집중할 수 있습니다.\n- 철저한 자기 관리와 루틴을 통해 높은 생산성을\n   유지합니다.', // 예시 텍스트
                               style: const TextStyle(fontSize: 16, height: 1.5),
                             ),
                           ],

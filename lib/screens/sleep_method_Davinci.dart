@@ -143,7 +143,7 @@ class SleepMethodDavinciScreen extends StatelessWidget {
                             ),
                             const Divider(height: 20),
                             Text(
-                              '- 가장 일반적인 수면 방식입니다.\n- 하루에 한 번, 밤에 몰아서 잡니다.', // 예시 텍스트
+                              '- \'우베르만 수면\'이라 불리는 다상 수면의 한 형\n   태입니다.\n- 전설에 따르면 4시간마다 15~20분씩 매우 짧\n   은 잠을 잤다고 합니다.', // 예시 텍스트
                               style: const TextStyle(fontSize: 16, height: 1.5),
                             ),
                             const SizedBox(height: 25),
@@ -156,7 +156,7 @@ class SleepMethodDavinciScreen extends StatelessWidget {
                             ),
                             const Divider(height: 20),
                             Text(
-                              '- 대부분의 사람들에게 적합합니다.\n- 7~8시간의 연속 수면을 권장합니다.', // 예시 텍스트
+                              '- 하루 총 수면 시간을 2시간 내외로 줄여 깨어\n   있는 시간을 극대화합니다.\n- 창의적인 활동이나 연구에 더 많은 시간을 할애\n   할 수 있습니다.', // 예시 텍스트
                               style: const TextStyle(fontSize: 16, height: 1.5),
                             ),
                           ],
