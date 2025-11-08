@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'themes.dart';
 import 'screens/home_screen.dart';
 import 'screens/alarm_screen.dart';
+import 'screens/friends_screen.dart';
 
 void main()  {
   runApp(const MyApp());
@@ -17,10 +18,11 @@ class MyApp extends StatelessWidget {
       title: 'ITARENA',
       theme: AppTheme.lightTheme(context),
       // 첫 화면: 로그인
-      initialRoute: '/alarm',
+      initialRoute: '/friends',
       routes: {
         '/': (context) => const HomeScreen(),
         '/alarm': (context) => const AlarmScreen(),
+        '/friends': (context) => const FriendsScreen(),
       },
     );
   }
