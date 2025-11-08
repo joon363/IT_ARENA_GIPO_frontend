@@ -13,21 +13,24 @@ class _HomeScreenState extends State<HomeScreen> {
   // 예: double _progress = 0.0;
   // 현재는 0.75 (75%)로 고정하여 디자인을 보여줍니다.
   final double _progress = 0.75; // 0.0 ~ 1.0 사이의 값
-  final int _currentTabIndex = 0; // 현재 선택된 탭 인덱스
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // 1. 하단 Navbar
       bottomNavigationBar: BottomAppBar(
+        color: Colors.white,
         child: Container(
           height: 60.0, // 하단 바 높이
           child: Row(
             // Row의 자식들을 1:1:1 비율로 나누기 위해 Expanded 사용
             children: [
-              // 1. 비활성화 버튼 (왼쪽)
+              // 1. 버튼 (왼쪽)
               Expanded(
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    // 1번 버튼 기능
+                    Navigator.pushNamed(context, '/');
+                  },
                   child: Container(
                     height: double.infinity,
                     alignment: Alignment.center,
@@ -85,19 +88,29 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // 상단 타이틀
-            const SizedBox(height: 40),
-            const Padding(
-              padding: EdgeInsets.all(24.0),
-              child: Text(
-                '호날두 수면법',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            // 1. 상단 영역 (SizedBox + Text)을 하얀색 Container로 감쌉니다.
+            Container(
+              width: double.infinity, // 가로 폭 전체
+              color: Colors.white,      // 배경색을 하얀색으로 지정
+              child: const Column(
+                // 공백과 텍스트를 담기 위해 Column 사용
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(14.0),
+                    child: Text(
+                      '호날두 수면법',
+                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
               ),
             ),
             
             Expanded(
-              child: Center(
-                child: Column(
+              child: Container(
+                alignment: Alignment.center,
+                color: Color(0xffFFF5EB),
+                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // 빨간색 원 (진행률 표시기)
@@ -108,9 +121,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 250, // 원의 크기
                         alignment: Alignment.center,
                         child: const Text(
-                          'O시간 O분 후에\n기상/취침할 시간입니다', // 이 텍스트도 동적으로 변경될 수 있습니다.
+                          'OO시간 OO분 후에\n기상/취침할 시간입니다', // 이 텍스트도 동적으로 변경될 수 있습니다.
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
