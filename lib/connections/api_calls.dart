@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
-import '../models/party_model.dart';
+import '../models/alarm_model.dart';
 import '../models/userStatus.dart';
 import '../models/friend_model.dart';
 const String baseUrl = 'https://api.isttech.franknoh.dev/v1';
@@ -86,29 +86,25 @@ Future<List<User>> fetchFriends(String token) async {
 }
 
 
-Future<List<AlarmParty>> fetchAlarmParties() async {
-  await Future.delayed(const Duration(seconds: 1)); // 네트워크 지연 시뮬레이션
+Future<List<Alarm>> fetchAlarms(String token) async {
+  const url = '$baseUrl/alarms'; // 실제 API 주소로 변경
 
-  final responseData = [
-    {
-      "time": "07:00",
-      "members": ["user1", "user2", "user3"],
-      "isParticipating": true,
+  final response = await http.get(
+    Uri.parse(url),
+    headers: {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
     },
-    {
-      "time": "08:30",
-      "members": ["user4", "user5"],
-      "isParticipating": false,
-    },
-    {
-      "time": "09:15",
-      "members": ["user2", "user6", "user7", "user8", "user8", "user8",],
-      "isParticipating": true,
-    },
-  ];
+  );
 
-  return responseData.map((json) => AlarmParty.fromJson(json)).toList();
+  if (response.statusCode == 200) {
+    final List<dynamic> jsonData = json.decode(response.body);
+    return jsonData.map((data) => Alarm.fromJson(data)).toList();
+  } else {
+    throw Exception('Failed to load alarms: ${response.statusCode}');
+  }
 }
+
 
 Future<bool> addFriend(String nickname) async {
   await Future.delayed(const Duration(seconds: 1)); // 네트워크 지연 시뮬레이션

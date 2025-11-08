@@ -4,7 +4,7 @@ import 'providers/sleep_provider.dart';
 import 'themes.dart';
 import 'screens/main_screen.dart';
 import 'screens/home_screen.dart';
-import 'screens/alarm_screen.dart';
+import 'screens/alarm_waiting_screen.dart';
 import 'screens/friends_screen.dart';
 import 'screens/sleep_party_list_screen.dart';
 import 'screens/sleep_method_list.dart';
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MainScreen(),
         '/home': (context) => const HomeScreen(),
-        '/alarm': (context) => const AlarmScreen(),
+        '/alarm': (context) => const AlarmWaitingScreen(),
         '/sleep_party_list': (context) => const SleepPartyListScreen(),
         '/friends': (context) => const FriendsScreen(),
         '/sleep_method_list': (context) => const SleepMethodListScreen(),

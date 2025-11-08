@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:it_arena/connections/API_KEYS.dart';
 import '../connections/api_calls.dart';
-import '../models/party_model.dart';
+import '../constants.dart';
+import '../models/alarm_model.dart';
 import '../themes.dart';
 import 'package:flutter/cupertino.dart';
 class SleepPartyListScreen extends StatefulWidget {
@@ -11,7 +13,7 @@ class SleepPartyListScreen extends StatefulWidget {
 }
 
 class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
-  late Future<List<AlarmParty>> _alarmPartiesFuture;
+  late Future<List<Alarm>> _alarmPartiesFuture;
   Duration duration = const Duration(hours: 1, minutes: 30);
   int selectedHour = 0;
   int selectedMinute = 0;
@@ -127,17 +129,18 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
   @override
   void initState() {
     super.initState();
-    _alarmPartiesFuture = fetchAlarmParties();
+    _alarmPartiesFuture = fetchAlarms(junToken);
   }
 
   @override
   Widget build(BuildContext context) {
     const double itemExtent = 40.0;
+    bool isParticipated = false;
 
     return Scaffold(
       appBar: AppBar(automaticallyImplyLeading: false, title: const Text("수면팟 목록", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
       backgroundColor: backGround,
-      body: FutureBuilder<List<AlarmParty>>(
+      body: FutureBuilder<List<Alarm>>(
         future: _alarmPartiesFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -148,12 +151,17 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
             return const Center(child: Text("참여 가능한 파티가 없습니다."));
           }
 
-          final parties = snapshot.data!;
+          final List<Alarm> alarms = snapshot.data!;
 
           return ListView.builder(
-            itemCount: parties.length,
+            itemCount: alarms.length,
             itemBuilder: (context, index) {
-              final party = parties[index];
+              final Alarm alarm = alarms[index];
+              for (Member member in alarm.members){
+                if (member.userId==junToken){
+                  if(member.verified) isParticipated=true;
+                }
+              }
               return Container(
                 margin: EdgeInsets.only(right: 12, left: 12, top: 12),
                 padding: EdgeInsets.symmetric(horizontal: 24),
@@ -171,13 +179,13 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
                         children: [
                           SizedBox(width: 95,
                             child:
-                            Text(party.time, style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                            Text(formatDuration(alarm.start), style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                             ),
                           ),
                           Expanded(
                               child: Padding(padding: EdgeInsets.symmetric(vertical: 8),
                               child: SingleChildScrollView(
-                                child: Text(party.members.join('\n'),
+                                child: Text(alarm.members.map((m) => m.nickname).join('\n'),
                                   style: TextStyle(color: gray, fontSize: 14, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis)),
                               ),
                               )
@@ -186,25 +194,25 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
                       ),
                     ),
                     Material(
-                      color: party.isParticipating ? gray : primaryColor,
+                      color: isParticipated ? gray : primaryColor,
                       borderRadius: BorderRadius.circular(8),
                       elevation: 0,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(8),
-                        enableFeedback: !party.isParticipating,
-                        onTap: party.isParticipating
+                        enableFeedback: !isParticipated,
+                        onTap: isParticipated
                           ? null
                           : () {
                             //TODO: call API;
                           },
-                        splashColor: party.isParticipating ? Colors.transparent : null,
-                        highlightColor: party.isParticipating ? Colors.transparent : null,
+                        splashColor: isParticipated ? Colors.transparent : null,
+                        highlightColor: isParticipated ? Colors.transparent : null,
                         child: Container(
                           height: 39,
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           alignment: Alignment.center,
                           child: Text(
-                            party.isParticipating ? "이미 참여함" : "참여하기",
+                            isParticipated ? "이미 참여함" : "참여하기",
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16,
