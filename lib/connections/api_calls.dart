@@ -44,20 +44,22 @@ Future<bool> checkPoseSuccessFromApi({
 Future<List<UserStatus>> fetchUserStatuses() async {
 
   List<UserStatus> users = [
-    UserStatus(name: 'user1', status: false),
-    UserStatus(name: 'user2', status: true),
-    UserStatus(name: 'user3', status: false),
-    UserStatus(name: 'user4', status: true),
+    UserStatus(name: 'user1', status: true, imageUrl: "https://example.com/images/user1.jpg"),
+    UserStatus(name: 'user2', status: true, imageUrl: "https://example.com/images/user1.jpg"),
+    UserStatus(name: 'user3', status: true, imageUrl: "https://example.com/images/user1.jpg"),
+    UserStatus(name: 'user4', status: true, imageUrl: "https://example.com/images/user1.jpg"),
   ];
   return users;
   try {
-    final response = await http.get(Uri.parse('https://example.com/api/users'));
+    final response = await http.get(Uri.parse('https://example.com/api/userStatus'));
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body) as List;
+      final List data = jsonDecode(response.body);
       users = data.map((e) => UserStatus.fromJson(e)).toList();
+    } else {
+      print("서버 오류: ${response.statusCode}");
     }
   } catch (e) {
-    print('API Error: $e');
+    print("통신 오류: $e");
   }
   return users;
 }

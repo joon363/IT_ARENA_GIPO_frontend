@@ -143,11 +143,13 @@ class AlarmCameraScreenState extends State<AlarmCameraScreen> {
                                     },
                                   );
 
-                                  // --- 카운트 끝나면 촬영 ---
+                                  await _controller.pausePreview();
+
                                   final image = await _controller.takePicture();
 
                                   if (!context.mounted) return;
 
+                                  // 🔸 결과 화면으로 이동
                                   await Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) => AlarmCameraResultScreen(
@@ -156,6 +158,9 @@ class AlarmCameraScreenState extends State<AlarmCameraScreen> {
                                       ),
                                     ),
                                   );
+
+                                  // 🔸 복귀 후 카메라 다시 시작
+                                  await _controller.resumePreview();
                                 } catch (e) {
                                   print(e);
                                 }

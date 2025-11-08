@@ -30,7 +30,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomeScreen(),
         '/alarm': (context) => const AlarmScreen(),
-        '/alarmCamera': (context) => AlarmCameraScreen(camera: camera),
       },
     );
   }
