@@ -92,7 +92,7 @@ class SleepMethodDwayneScreen extends StatelessWidget {
                           height: 20,
                         ),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/sleep_method_list');
+                          Navigator.pop(context);
                         },
                       ),
                     ),
