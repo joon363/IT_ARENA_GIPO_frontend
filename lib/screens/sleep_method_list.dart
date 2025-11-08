@@ -230,8 +230,15 @@ class _SleepMethodListScreenState extends State<SleepMethodListScreen> {
                     height: 24,
                   ),
                   onPressed: () {
-                    // TODO: 돋보기 버튼 클릭 시 새 화면으로 이동
-                    print('$title 돋보기 버튼 클릭됨');
+                    if(index == 0) {
+                      Navigator.pushNamed(context, '/sleep_method_normal');
+                    } else if (index == 1) {
+                      Navigator.pushNamed(context, '/sleep_method_Ronaldo');
+                    } else if (index == 2) {
+                      Navigator.pushNamed(context, '/sleep_method_Dwayne');
+                    } else if (index == 3) {
+                      Navigator.pushNamed(context, '/sleep_method_Davinci');
+                    }
                   },
                 ),
               ],
