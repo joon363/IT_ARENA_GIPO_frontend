@@ -27,10 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // 1. 버튼 (왼쪽)
               Expanded(
                 child: InkWell(
-                  onTap: () {
-                    // 1번 버튼 기능
-                    Navigator.pushNamed(context, '/');
-                  },
+                  onTap: () {},
                   child: Container(
                     height: double.infinity,
                     alignment: Alignment.center,
@@ -133,8 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     // 수면법 변경하기 버튼
                     ElevatedButton(
                       onPressed: () {
-                        // 버튼을 눌렀을 때 실행될 로직 (예: 다른 화면으로 이동)
-                        print('수면법 변경하기 버튼 클릭됨!');
+                        Navigator.pushNamed(context, '/sleep_method_list');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xffFF9F31), // 버튼 배경색
