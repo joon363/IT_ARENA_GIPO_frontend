@@ -108,7 +108,8 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
                                 "date",
                                 "pose_1",
                                 [
-                                  "0b6ea4fd-7182-41cc-a9a4-93dc9ab6e950", "d4cd00dd-75c5-420c-a95c-34ed76e161a0", "7f27800b-c7ab-4cf5-ba33-14739aa11ca8", "88866b77-0d0b-4da1-874b-6cdd9c8c9052"
+                                  "0b6ea4fd-7182-41cc-a9a4-93dc9ab6e950",
+                                  "7f27800b-c7ab-4cf5-ba33-14739aa11ca8"
                                 ]
                               );
                               var res = await fetchAlarms(junToken);
@@ -214,36 +215,49 @@ class _SleepPartyListScreenState extends State<SleepPartyListScreen> {
                         ],
                       ),
                     ),
-                    Material(
-                      color: isParticipated ? gray : primaryColor,
-                      borderRadius: BorderRadius.circular(8),
-                      elevation: 0,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        enableFeedback: !isParticipated,
-                        onTap: isParticipated
-                          ? null
-                          : () {
-                            //TODO: call API;
-                          },
-                        splashColor: isParticipated ? Colors.transparent : null,
-                        highlightColor: isParticipated ? Colors.transparent : null,
-                        child: Container(
-                          height: 39,
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          alignment: Alignment.center,
-                          child: Text(
-                            isParticipated ? "이미 참여함" : "참여하기",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+
+                        Material(
+                          color: isParticipated ? gray : primaryColor,
+                          borderRadius: BorderRadius.circular(8),
+                          elevation: 0,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(8),
+                            enableFeedback: !isParticipated,
+                            onTap: isParticipated
+                                ? null
+                                : () {
+                              //TODO: call API;
+                            },
+                            splashColor: isParticipated ? Colors.transparent : null,
+                            highlightColor: isParticipated ? Colors.transparent : null,
+                            child: Container(
+                              height: 39,
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              alignment: Alignment.center,
+                              child: Text(
+                                isParticipated ? "이미 참여함" : "참여하기",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    )
+                        IconButton(onPressed: () async{
+                          await deleteAlarm(junToken,alarm.id);
+                          var res = await fetchAlarms(junToken);
+                          setState(() {
+                            alarms = res;
+                          });
+                        }, icon: Icon(CupertinoIcons.delete))
 
+                      ],
+                    )
                   ]
                 )
               );

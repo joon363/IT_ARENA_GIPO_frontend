@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'providers/sleep_provider.dart';
 import 'themes.dart';
+import 'screens/login_screen.dart';
 import 'screens/main_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/alarm_waiting_screen.dart';
@@ -28,8 +29,9 @@ class MyApp extends StatelessWidget {
       title: 'ITARENA',
       theme: AppTheme.lightTheme(context),
       // 첫 화면: 로그인
-      initialRoute: '/',
+      initialRoute: '/login',
       routes: {
+        '/login':(context) => const LoginScreen(),
         '/':(context) => const MainScreen(),
         '/home':(context) => const HomeScreen(),
         '/alarm':(context) => const AlarmWaitingScreen(),

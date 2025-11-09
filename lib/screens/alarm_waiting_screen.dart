@@ -22,6 +22,7 @@ class AlarmWaitingScreen extends StatefulWidget {
 class _AlarmWaitingScreenState extends State<AlarmWaitingScreen> {
   late final Future<Alarm?> _initSetAlarm;
   final String? imagePath = null;
+  bool isWaitingForCamera = false;
   bool isDone = false;
   bool isUserDone = false;
   bool onInit = true;
@@ -35,7 +36,7 @@ class _AlarmWaitingScreenState extends State<AlarmWaitingScreen> {
     _initSetAlarm = _setAlarm();
     _timer = Timer.periodic(
       const Duration(seconds: 1),
-      (_) {if (!isDone) _checkAlarm();
+      (_) {if (!isDone && !isWaitingForCamera) _checkAlarm();
       },
     );
   }
@@ -143,24 +144,20 @@ class _AlarmWaitingScreenState extends State<AlarmWaitingScreen> {
                 child: Container(
                   color: colorsVer2[index],
                   child: (isAwake && user.imageUrl != null && user.imageUrl!.isNotEmpty) ?
-                    Expanded(
-                      child: Image.network(
-                        user.imageUrl!,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        errorBuilder: (context, error, stackTrace) =>
-                        const Icon(Icons.error, size: 48, color: Colors.white),
-                      ),
+                    Image.network(
+                      user.imageUrl!,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      errorBuilder: (context, error, stackTrace) =>
+                      const Icon(Icons.error, size: 48, color: Colors.white),
                     )
                     :
-                    Expanded(
-                      child: Image.asset(
-                        'assets/images/main logo.png',
-                        fit: BoxFit.scaleDown,
-                        width: double.infinity,
-                        errorBuilder: (context, error, stackTrace) =>
-                        const Icon(Icons.error, size: 48, color: Colors.white),
-                      ),
+                    Image.asset(
+                      'assets/images/main logo.png',
+                      fit: BoxFit.scaleDown,
+                      width: double.infinity,
+                      errorBuilder: (context, error, stackTrace) =>
+                      const Icon(Icons.error, size: 48, color: Colors.white),
                     ),
                 ),
               ),
@@ -277,13 +274,16 @@ class _AlarmWaitingScreenState extends State<AlarmWaitingScreen> {
 
                                 // 🔸 카메라 화면으로 직접 이동
                                 if (context.mounted) {
-                                  Navigator.push(
+                                  isWaitingForCamera = true;
+                                  await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
                                       AlarmCameraScreen(camera: firstCamera, alarmId: alarm!.id,),
                                     ),
                                   );
+
+                                  isWaitingForCamera = false;
                                 }
                               } catch (e) {
                                 debugPrint("Camera initialization failed: $e");
@@ -325,7 +325,7 @@ class _AlarmWaitingScreenState extends State<AlarmWaitingScreen> {
                                     Member u = entry.value;
                                     return _buildUserTile(u, index); // index 전달
                                   })
-                                ,
+                              ,
                             ],
                           ),)
                       ),

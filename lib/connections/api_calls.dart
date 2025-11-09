@@ -10,7 +10,6 @@ Future<bool> checkPoseSuccessFromApi(String token, {
     required String imagePath, // Flutter asset 경로
     required String alarmId, // Flutter asset 경로
   }) async {
-
   // 이미지 base64 인코딩
   final File imageFile = File(imagePath);
   final Uint8List imageBytes = await imageFile.readAsBytes();
@@ -60,6 +59,7 @@ Future<bool> checkPoseSuccessFromApi(String token, {
 }
 
 Future<List<User>> fetchFriends(String token) async {
+  print("API call by $token");
   const url = '$baseUrl/users/friends';
 
   final response = await http.get(
@@ -141,6 +141,27 @@ Future<void> createAlarm(String token, String name, int hour, int min, String al
     return;
   } else {
     throw Exception('Failed to create alarm: ${response.statusCode}');
+  }
+}
+
+Future<void> deleteAlarm(String token, String id) async {
+  final url = '$baseUrl/alarms/$id'; // 실제 API 주소로 변경
+  final Map<String, dynamic> requestData = {
+    "alarm_id ": id
+  };
+  final response = await http.delete(
+    Uri.parse(url),
+    headers: {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(requestData),
+  );
+
+  if (response.statusCode == 204) {
+    return;
+  } else {
+    throw Exception('Failed to delete alarm: ${response.statusCode}, ${response.body}');
   }
 }
 

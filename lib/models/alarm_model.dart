@@ -30,7 +30,7 @@ class Alarm {
       id: json['id'] ?? '',
       name: json['name'] ?? '',
       start: _parseDuration(json['start'] ?? ''),
-      resolved: false,//json['resolved'] ?? false,
+      resolved: json['resolved'] ?? false,
       alarmType: json['alarm_type'] ?? '',
       challenge: json['challenge'] ?? '',
       isEnabled: json['is_enabled'] ?? false,

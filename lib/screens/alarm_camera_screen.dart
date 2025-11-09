@@ -279,7 +279,9 @@ class AlarmCameraScreenState extends State<AlarmCameraScreen> {
                                                             ),
                                                             Expanded(
                                                               child:
-                                                              Column(
+                                                              Row(
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                spacing:4,
                                                                 children: [
                                                                   Material(
                                                                     color: gray2,
@@ -298,8 +300,8 @@ class AlarmCameraScreenState extends State<AlarmCameraScreen> {
                                                                         decoration: BoxDecoration(
                                                                           shape: BoxShape.circle,
                                                                         ),
-                                                                        padding: EdgeInsets.all(16),
-                                                                        child: Icon(CupertinoIcons.restart, size: 32, color: Colors.black),
+                                                                        padding: EdgeInsets.all(8),
+                                                                        child: Icon(CupertinoIcons.restart, size: 20, color: Colors.black),
                                                                       ),
                                                                     )
                                                                   ),
